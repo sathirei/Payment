@@ -6,6 +6,7 @@
         int currentPaymentNumber,
         DateTime expiry)
     {
+        public int Id { get; private set; }
         public int DaysBetweenPayments { get; private set; } = daysBetweenPayments;
         public int TotalNumberOfPayments { get; private set; } = totalNumberOfPayments;
         public int CurrentPaymentNumber { get; private set; } = currentPaymentNumber;

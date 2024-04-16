@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
 using ISO._4217;
-using Payment.Domain.BusinessRules;
+using Payment.Application.BusinessRules;
+using Xunit;
 
-namespace Payment.Domain.Tests.BusinessRules
+namespace Payment.Application.Tests.BusinessRules
 {
     public class CurrencyShouldBeValidISO4217Tests
     {

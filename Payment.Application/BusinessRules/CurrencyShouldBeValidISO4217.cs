@@ -1,6 +1,7 @@
 ﻿using ISO._4217;
+using Payment.Domain.BusinessRules;
 
-namespace Payment.Domain.BusinessRules
+namespace Payment.Application.BusinessRules
 {
     public class CurrencyShouldBeValidISO4217(string isoCurrencyCode) : IBusinessRule
     {
@@ -10,7 +11,7 @@ namespace Payment.Domain.BusinessRules
 
         public bool IsValid()
         {
-            return !string.IsNullOrWhiteSpace(isoCurrencyCode) && CurrencyCodesResolver.Codes                
+            return !string.IsNullOrWhiteSpace(isoCurrencyCode) && CurrencyCodesResolver.Codes
                 .Exists(currency => currency.Code == isoCurrencyCode);
         }
     }
