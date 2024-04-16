@@ -73,7 +73,7 @@ namespace Payment.Application.Mapper.Tests
             AssertProperties(payment, paymentViewDto!);
         }
 
-        private void AssertProperties(Domain.Payment payment, PaymentViewDto paymentViewDto)
+        private static void AssertProperties(Domain.Payment payment, PaymentViewDto paymentViewDto)
         {
             paymentViewDto.Id.Should().Be(payment.Id);
             paymentViewDto.Currency.Should().Be(payment.Currency);

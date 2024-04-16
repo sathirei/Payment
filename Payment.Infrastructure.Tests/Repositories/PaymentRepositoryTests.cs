@@ -15,7 +15,7 @@ namespace Payment.Infrastructure.Tests.Repositories
 
             // Act
             var sut = new PaymentRepository(paymentContext);
-            sut.Add(newPayment);
+            await sut.AddAsync(newPayment);
             await paymentContext.SaveChangesAsync();
 
             // Assert
@@ -33,7 +33,7 @@ namespace Payment.Infrastructure.Tests.Repositories
 
             // Act
             var sut = new PaymentRepository(paymentContext);
-            sut.Add(newPayment);
+            await sut.AddAsync(newPayment);
             await paymentContext.SaveChangesAsync();
             var paymentInDatabase = await sut.FindByIdAsync(newPayment.Id);
 
@@ -50,7 +50,7 @@ namespace Payment.Infrastructure.Tests.Repositories
 
             // Act
             var sut = new PaymentRepository(paymentContext);
-            sut.Add(newPayment);
+            await sut.AddAsync(newPayment);
             await paymentContext.SaveChangesAsync();
             var paymentInDatabase = await sut.FindAsync(x => x.Id == newPayment.Id);
 
@@ -67,7 +67,7 @@ namespace Payment.Infrastructure.Tests.Repositories
 
             // Act
             var sut = new PaymentRepository(paymentContext);
-            sut.Add(newPayment);
+            await sut.AddAsync(newPayment);
             await paymentContext.SaveChangesAsync();
             var paymentInDatabase = await sut.FindByIdAsync(newPayment.Id);
             sut.Remove(paymentInDatabase!);
@@ -87,7 +87,7 @@ namespace Payment.Infrastructure.Tests.Repositories
 
             // Act
             var sut = new PaymentRepository(paymentContext);
-            sut.Add(newPayment);
+            await sut.AddAsync(newPayment);
             await paymentContext.SaveChangesAsync();
             var paymentInDatabase = await sut.FindByIdAsync(newPayment.Id);
             paymentInDatabase!.UpdateStatus(PaymentStatus.SUCCESS);

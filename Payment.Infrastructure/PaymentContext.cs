@@ -18,6 +18,14 @@ namespace Payment.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new PaymentConfiguration());
+            ConfigurePaymentSource(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+        }
+
+        private static void ConfigurePaymentSource(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Domain.Payment>().Navigation(e => e.Source).AutoInclude();
+
             modelBuilder.Entity<Domain.Source.PaymentSource>()
                 .Property(x => x.Id)
                 .UseIdentityColumn()
@@ -38,7 +46,6 @@ namespace Payment.Infrastructure
                 .HasConversion(
                 s => Encryption.Encrypt(s),
                 v => Encryption.Decrypt(v));
-            base.OnModelCreating(modelBuilder);
         }
     }
 }

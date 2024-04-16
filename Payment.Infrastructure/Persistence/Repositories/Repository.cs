@@ -4,19 +4,14 @@ using System.Linq.Expressions;
 
 namespace Payment.Infrastructure.Persistence.Repositories
 {
-    public abstract class Repository<T> : IRepository<T>
+    public abstract class Repository<T>(PaymentContext context) : IRepository<T>
          where T : class, IEntityMarker
     {
-        protected readonly PaymentContext _context;
+        protected readonly PaymentContext _context = context;
 
-        public Repository(PaymentContext context)
+        public async Task AddAsync(T entity)
         {
-            _context = context;
-        }
-
-        public void Add(T entity)
-        {
-            _context.Set<T>().Add(entity);
+            await _context.Set<T>().AddAsync(entity);
         }
 
         public void Update(T entity)

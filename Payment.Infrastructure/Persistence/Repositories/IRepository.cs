@@ -8,7 +8,7 @@ namespace Payment.Infrastructure.Persistence.Repositories
     {
         Task<T?> FindAsync(Expression<Func<T, bool>> predicate);
         Task<T?> FindByIdAsync(Guid id);
-        void Add(T entity);
+        Task AddAsync(T entity);
         void Update(T entity);
         void Remove(T entity);
     }

@@ -1,6 +1,6 @@
 @Payment.Api_HostAddress = http://localhost:5183
 
-GET {{Payment.Api_HostAddress}}/weatherforecast/
+GET {{Payment.Api_HostAddress}}/v1.0/Payments/{{$guid}}
 Accept: application/json
 
 ###

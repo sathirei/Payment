@@ -26,7 +26,7 @@ namespace Payment.Infrastructure.Tests
             }
         }
 
-        public PaymentContext CreateContext() => new PaymentContext(
+        public PaymentContext CreateContext() => new(
             new DbContextOptionsBuilder<PaymentContext>()
             //.UseInMemoryDatabase(databaseName: "TestPayment")
             .UseSqlServer(ConnectionString)

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Payment.Domain;
 using Payment.Domain.Constants;
+using Payment.Domain.Source;
 
 namespace Payment.Infrastructure.Persistence.Configuration
 {
@@ -37,7 +38,9 @@ namespace Payment.Infrastructure.Persistence.Configuration
                .IsConcurrencyToken();
 
             builder.OwnsOne(p => p.Plan, ConfigurePaymentPlan);
-            builder.HasOne(p => p.Source);
+            builder.HasOne(p => p.Source)
+                .WithOne(s => s.Payment)
+                .HasForeignKey<PaymentSource>(s => s.PaymentId);
         }
 
         private void ConfigurePaymentPlan(

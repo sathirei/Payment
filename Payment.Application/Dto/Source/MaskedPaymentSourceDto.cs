@@ -1,14 +1,7 @@
-﻿using Payment.Domain.Source;
-
-namespace Payment.Application.Dto.Source
+﻿namespace Payment.Application.Dto.Source
 {
-    public class MaskedPaymentSourceDto
+    public class MaskedPaymentSourceDto(string? cardNumber)
     {
-        public string? MaskedCardNumber { get; private set; }
-
-        public MaskedPaymentSourceDto(string? cardNumber)
-        {
-            MaskedCardNumber = cardNumber;
-        }
+        public string? MaskedCardNumber { get; private set; } = cardNumber;
     }
 }

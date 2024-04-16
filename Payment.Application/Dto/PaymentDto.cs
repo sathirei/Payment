@@ -11,7 +11,5 @@ namespace Payment.Application.Dto
         public string Currency { get; set; }
         public string MerchantId { get; set; }
         public string Reference { get; set; }
-        public DateTimeOffset CreatedDateTime { get; set; }
-        public DateTimeOffset LastChangedDateTime { get; set; }
     }
 }

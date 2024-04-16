@@ -6,5 +6,8 @@ namespace Payment.Domain.Source
     {
         public int Id { get; private set; }
         public PaymentSourceType Type { get; private set; } = type;
+
+        public virtual Payment Payment { get; private set; }
+        public Guid PaymentId { get; set; }
     }
 }
