@@ -1,6 +1,7 @@
 using IdempotentAPI.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 using Payment.Domain;
 using Payment.Event;
 
@@ -31,7 +32,7 @@ namespace Payment.Api.Controllers
             {
                 Id = bankResponse.Id,
                 EventType = EventType.ResponseFromBank,
-                Payload = bankResponse
+                Payload = JsonConvert.SerializeObject(bankResponse)
             });
             return Accepted();
         }

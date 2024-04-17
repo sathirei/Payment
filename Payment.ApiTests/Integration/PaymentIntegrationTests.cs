@@ -134,6 +134,7 @@ namespace Payment.ApiTests.Integration
         }
 
         [Fact]
+        // Long Running test: waits for event processing
         public async Task AfterSendingToBank_PaymentShouldUpdateResponseField()
         {
             // Arrange
@@ -176,6 +177,7 @@ namespace Payment.ApiTests.Integration
         }
 
         [Fact]
+        // Long Running test: waits for event processing
         public async Task AfterReceiving_SuccessfulBankResponseThroughWebhook_ShouldUpdatePaymentStatus_ToSuccess()
         {
             // Arrange
@@ -242,6 +244,7 @@ namespace Payment.ApiTests.Integration
         }
 
         [Fact]
+        // Long Running test: waits for event processing
         public async Task AfterReceiving_FailedBankResponseThroughWebhook_ShouldUpdatePaymentStatus_ToFailed()
         {
             // Arrange

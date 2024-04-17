@@ -19,7 +19,7 @@ namespace Payment.Event.Tests
             {
                 Id = Guid.NewGuid(),
                 EventType = EventType.SendToBank,
-                Payload = new()
+                Payload = ""
             });
 
             strategyFactoryMock.Setup(x => x.CreateStrategy(It.IsAny<EventType>())).Returns(strategyMock.Object);

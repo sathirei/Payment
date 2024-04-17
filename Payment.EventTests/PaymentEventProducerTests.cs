@@ -17,7 +17,7 @@ namespace Payment.Event.Tests
             {
                 EventType = EventType.SendToBank,
                 Id = Guid.NewGuid(),
-                Payload = new()
+                Payload = ""
             };
 
             busMock.Setup(x => x.Publish(It.IsAny<PaymentEvent>(), It.IsAny<CancellationToken>()));

@@ -7,6 +7,7 @@ using Payment.Application.Dto;
 using Payment.Domain.Constants;
 using Microsoft.AspNetCore.Mvc;
 using FluentAssertions;
+using Payment.Domain;
 
 namespace Payment.Api.Controllers.Tests
 {
@@ -146,7 +147,9 @@ namespace Payment.Api.Controllers.Tests
                 "GBP",
                 "Amazon_123",
                 "23455",
-                "Response"
+                "Response",
+                SystemTime.OffsetNow(),
+                SystemTime.OffsetNow()
                 );
 
             paymentServicMock.Setup(x => x.GetAsync(It.IsAny<Guid>()))
@@ -197,7 +200,9 @@ namespace Payment.Api.Controllers.Tests
                 "GBP",
                 "Amazon_123",
                 "23455",
-                "Response"
+                "Response",
+                SystemTime.OffsetNow(),
+                SystemTime.OffsetNow()
                 );
 
             paymentServicMock.Setup(x => x.GetAsync(It.IsAny<Guid>()))

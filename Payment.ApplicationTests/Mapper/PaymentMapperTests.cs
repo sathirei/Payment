@@ -5,6 +5,7 @@ using Payment.Domain.Constants;
 using FluentAssertions;
 using Payment.Domain.Source;
 using Payment.Application.Tests;
+using Payment.Domain;
 
 namespace Payment.Application.Mapper.Tests
 {

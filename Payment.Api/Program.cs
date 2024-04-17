@@ -70,7 +70,6 @@ builder.Services.AddHttpClient<IPaymentEventProcessor, SendPaymentEventProcessor
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<PaymentEventConsumer>();
-
     x.UsingInMemory((context, cfg) =>
     {
         cfg.ConfigureEndpoints(context);

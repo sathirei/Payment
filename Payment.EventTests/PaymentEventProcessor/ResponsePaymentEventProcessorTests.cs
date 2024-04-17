@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Payment.Event.Tests;
 using Payment.Domain;
 using FluentAssertions;
+using Newtonsoft.Json;
 
 namespace Payment.Event.PaymentEventProcessor.Tests
 {
@@ -25,12 +26,12 @@ namespace Payment.Event.PaymentEventProcessor.Tests
             {
                 EventType = EventType.ResponseFromBank,
                 Id = id,
-                Payload = new BankResponse
+                Payload = JsonConvert.SerializeObject(new BankResponse
                 {
                     Id = id,
                     Status = "SUCCESS",
                     Message = "PAYMENT_COMPLETED"
-                }
+                })
             };
             var newPayment = Fixture.NewPayment(Domain.Constants.PaymentType.OneTime);
             unitOfWorkMock.Setup(x => x.CompleteAsync());
@@ -64,12 +65,12 @@ namespace Payment.Event.PaymentEventProcessor.Tests
             {
                 EventType = EventType.ResponseFromBank,
                 Id = id,
-                Payload = new BankResponse
+                Payload = JsonConvert.SerializeObject(new BankResponse
                 {
                     Id = id,
                     Status = "FAILED",
                     Message = "SOMETHING_WENT_WRONG"
-                }
+                })
             };
             var newPayment = Fixture.NewPayment(Domain.Constants.PaymentType.OneTime);
             unitOfWorkMock.Setup(x => x.CompleteAsync());
