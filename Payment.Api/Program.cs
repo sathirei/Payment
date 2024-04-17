@@ -78,12 +78,12 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
-var connectionString = @"Server=.;Database=Payment;TrustServerCertificate=True;Trusted_Connection=True";
+// var connectionString = @"Server=.;Database=Payment;TrustServerCertificate=True;Trusted_Connection=True";
 
 builder.Services.AddDbContext<PaymentContext>(options =>
 {
-    options.UseSqlServer(connectionString);
-    //options.UseInMemoryDatabase(databaseName: "Payments");
+    // options.UseSqlServer(connectionString);
+    options.UseInMemoryDatabase(databaseName: "Payments");
 });
 
 // API Versioning

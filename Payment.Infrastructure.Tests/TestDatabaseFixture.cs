@@ -4,8 +4,7 @@ namespace Payment.Infrastructure.Tests
 {
     public class TestDatabaseFixture
     {
-        private const string ConnectionString = @"Server=.;Database=Payment;TrustServerCertificate=True;Trusted_Connection=True";
-
+        // private const string ConnectionString = @"Server=.;Database=Payment;TrustServerCertificate=True;Trusted_Connection=True";
         private static readonly object _lock = new();
         private static bool _databaseInitialized;
 
@@ -28,8 +27,8 @@ namespace Payment.Infrastructure.Tests
 
         public PaymentContext CreateContext() => new(
             new DbContextOptionsBuilder<PaymentContext>()
-            //.UseInMemoryDatabase(databaseName: "TestPayment")
-            .UseSqlServer(ConnectionString)
+            .UseInMemoryDatabase(databaseName: "TestPayment")
+            //.UseSqlServer(ConnectionString)
             .Options);
     }
 }
