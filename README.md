@@ -41,7 +41,6 @@ POST: Payment[SendToBank] :
         + => Event Consumer<br>
           + => Bank API Call<br>
             + => Update Payment details<br>
-`
 
 GET Payment:
 * API => Validation
@@ -64,7 +63,7 @@ The solution starts along with the Bank API Stub so it is self sufficient. It us
 
 ##### Success Scenario:
 #### Step 1: Create a Payment
-```
+````
 curl -X 'POST' \
   'https://localhost:7266/v1.0/Payments' \
   -H 'accept: */*' \
@@ -84,23 +83,22 @@ curl -X 'POST' \
   "merchantId": "Amazon_123",
   "reference": "App_Clothes_123"
 }'
-```
+````
 #### Response: 202
-```
+````
 {
     "id": "dc168f0f-2468-4e82-a03d-3f3668171526",
     "status": "EXECUTING"
 }
-`
-
-Step 2: Get the Payment
-`
+````
+#### Step 2: Get the Payment
+````
 curl -X 'GET' \
   'https://localhost:7266/v1.0/Payments/dc168f0f-2468-4e82-a03d-3f3668171526' \
   -H 'accept: */*'
-`
+````
 #### Response: 200
-`
+```
 {
     "id": "dc168f0f-2468-4e82-a03d-3f3668171526",
     "status": "EXECUTING",
@@ -116,10 +114,10 @@ curl -X 'GET' \
     "createdDateTime": "2024-04-17T02:25:03.8728323+00:00",
     "lastChangedDateTime": "2024-04-17T02:25:03.8728889+00:00"
 }
-```
+````
 
 #### Step 3: Call WebHook to update Payment Status
-```
+````
 curl --location --request POST 'https://localhost:7266/v1.0/WebHook' \
 --header 'IdempotencyKey: 435466' \
 --header 'Content-Type: application/json' \
@@ -128,14 +126,14 @@ curl --location --request POST 'https://localhost:7266/v1.0/WebHook' \
   "status": "SUCCESS",
   "message": "PAYMENT_SUCCESSFUL"
 }'
-```
+````
 #### Response: 202
 #### Step 4: Get the updated Payment details
-```
+````
 curl -X 'GET' \
   'https://localhost:7266/v1.0/Payments/dc168f0f-2468-4e82-a03d-3f3668171526' \
   -H 'accept: */*'
-```
+````
 #### Response: 200
 ```
 {
