@@ -42,7 +42,8 @@ namespace Payment.Application.Mapper
                 payment.Amount,
                 payment.Currency,
                 payment.MerchantId,
-                payment.Reference);
+                payment.Reference,
+                payment.Response);
         }
 
         private static string? GetCardNumber(PaymentSource source)

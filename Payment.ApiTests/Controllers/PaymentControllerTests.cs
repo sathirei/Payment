@@ -145,7 +145,8 @@ namespace Payment.Api.Controllers.Tests
                 1000,
                 "GBP",
                 "Amazon_123",
-                "23455"
+                "23455",
+                "Response"
                 );
 
             paymentServicMock.Setup(x => x.GetAsync(It.IsAny<Guid>()))
@@ -195,7 +196,8 @@ namespace Payment.Api.Controllers.Tests
                 1000,
                 "GBP",
                 "Amazon_123",
-                "23455"
+                "23455",
+                "Response"
                 );
 
             paymentServicMock.Setup(x => x.GetAsync(It.IsAny<Guid>()))

@@ -83,6 +83,7 @@ namespace Payment.Application.Mapper.Tests
             paymentViewDto.LastChangedDateTime.Should().Be(payment.LastChangedDateTime);
             paymentViewDto.MerchantId.Should().Be(payment.MerchantId);
             paymentViewDto.Reference.Should().Be(payment.Reference);
+            paymentViewDto.Response.Should().Be(payment.Response);
             var sourceCardNumber = ((CreditCardPaymentSource)payment.Source).Number;
             paymentViewDto.Source.MaskedCardNumber.Should()
                 .Be(sourceCardNumber.MaskedLast('x', 4));

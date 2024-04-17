@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.Memory;
 using Microsoft.Extensions.DependencyInjection;
-using Payment.Application.Services;
+using Payment.Bank.Stub;
 using Payment.Infrastructure;
-using Payment.Infrastructure.Persistence.Repositories;
 
 namespace Payment.ApiTests.Helper
 {
@@ -13,6 +13,8 @@ namespace Payment.ApiTests.Helper
     {
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            // TODO: scope and dispose apiInstance on the running test
+            var apiInstance = BankApiStub.StartStub();
             base.ConfigureWebHost(builder);
 
             builder.ConfigureTestServices(services =>
@@ -25,19 +27,17 @@ namespace Payment.ApiTests.Helper
                 {
                     options.UseInMemoryDatabase(databaseName: "Payment_Tests");
                 });
-                //var paymentservice = services.SingleOrDefault(
-                //   d => d.ServiceType == typeof(PaymentService));
-                //services.Remove(paymentservice);
-                //services.AddScoped<IUnitOfWork, UnitOfWork>();
-                //services.AddScoped<IRepository<Domain.Payment>, PaymentRepository>();
+            });
 
-                //services.AddScoped<IPaymentService, PaymentService>(builder =>
-                //{
-                //    var repository = builder.GetRequiredService<IRepository<Domain.Payment>>();
-                //    var unitOfWork = builder.GetRequiredService<IUnitOfWork>();
-                //    // var mock = MockHttpMessageHandler<int>.SetUpBasicGetResource(new List<int> { 1, 2, 3 });
-                //    return new PaymentService(repository, unitOfWork);
-                //});
+            builder.ConfigureAppConfiguration((ctx, b) =>
+            {
+                b.Add(new MemoryConfigurationSource
+                {
+                    InitialData = new Dictionary<string, string?>
+                    {
+                        ["BankBaseUrl"] = apiInstance.Address
+                    }
+                });
             });
 
             builder.UseEnvironment("Development");

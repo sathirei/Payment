@@ -40,8 +40,14 @@ namespace Payment.Domain
         public string Currency { get; private set; }
         public string MerchantId { get; private set; }
         public string Reference { get; private set; }
+        public string? Response { get; private set; }
         public DateTimeOffset CreatedDateTime { get; private set; }
         public DateTimeOffset LastChangedDateTime { get; private set; }
+
+        public void UpdateResponse(string? response)
+        {
+            Response = response;
+        }
 
         public void UpdateStatus(PaymentStatus status)
         {

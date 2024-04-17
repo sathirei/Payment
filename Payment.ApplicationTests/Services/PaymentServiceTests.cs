@@ -7,6 +7,7 @@ using Payment.Domain.Constants;
 using FluentAssertions;
 using Payment.Application.Dto;
 using Payment.Application.Dto.Source;
+using Payment.Event;
 
 namespace Payment.Application.Services.Tests
 {
@@ -18,6 +19,7 @@ namespace Payment.Application.Services.Tests
             // Arrange
             var repositoryMock = new Mock<IRepository<Domain.Payment>>();
             var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var paymentEventProducerMock = new Mock<IEventProducer<PaymentEvent>>();
             var payment = Fixture.NewPayment(PaymentType.OneTime);
 
             repositoryMock.Setup(x => x.FindByIdAsync(It.IsAny<Guid>()))
@@ -27,7 +29,8 @@ namespace Payment.Application.Services.Tests
             // Act
             IPaymentService sut = new PaymentService(
                 repositoryMock.Object,
-                unitOfWorkMock.Object
+                unitOfWorkMock.Object,
+                paymentEventProducerMock.Object
                 );
 
             var result = await sut.GetAsync(payment.Id);
@@ -44,6 +47,7 @@ namespace Payment.Application.Services.Tests
             // Arrange
             var repositoryMock = new Mock<IRepository<Domain.Payment>>();
             var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var paymentEventProducerMock = new Mock<IEventProducer<PaymentEvent>>();
             var payment = Fixture.NewPayment(PaymentType.OneTime);
 
             repositoryMock.Setup(x => x.FindByIdAsync(It.IsAny<Guid>()))
@@ -53,7 +57,8 @@ namespace Payment.Application.Services.Tests
             // Act
             IPaymentService sut = new PaymentService(
                 repositoryMock.Object,
-                unitOfWorkMock.Object
+                unitOfWorkMock.Object,
+                paymentEventProducerMock.Object
                 );
 
             Func<Task> act = () => sut.GetAsync(payment.Id);
@@ -70,6 +75,7 @@ namespace Payment.Application.Services.Tests
             // Arrange
             var repositoryMock = new Mock<IRepository<Domain.Payment>>();
             var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var paymentEventProducerMock = new Mock<IEventProducer<PaymentEvent>>();
             var payment = new PaymentDto
             {
                 Source = new PaymentSourceDto
@@ -91,7 +97,8 @@ namespace Payment.Application.Services.Tests
             // Act
             IPaymentService sut = new PaymentService(
                 repositoryMock.Object,
-                unitOfWorkMock.Object
+                unitOfWorkMock.Object,
+                paymentEventProducerMock.Object
                 );
 
             var result = await sut.PayAsync(payment);
@@ -109,6 +116,7 @@ namespace Payment.Application.Services.Tests
             // Arrange
             var repositoryMock = new Mock<IRepository<Domain.Payment>>();
             var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var paymentEventProducerMock = new Mock<IEventProducer<PaymentEvent>>();
             var payment = new PaymentDto
             {
                 Source = new PaymentSourceDto
@@ -131,7 +139,8 @@ namespace Payment.Application.Services.Tests
             // Act
             IPaymentService sut = new PaymentService(
                 repositoryMock.Object,
-                unitOfWorkMock.Object
+                unitOfWorkMock.Object,
+                paymentEventProducerMock.Object
                 );
 
             Func<Task> act = () => sut.PayAsync(payment);

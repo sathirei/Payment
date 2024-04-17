@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using IdempotentAPI.Cache.DistributedCache.Extensions.DependencyInjection;
 using IdempotentAPI.Core;
 using IdempotentAPI.Extensions.DependencyInjection;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 using OpenTelemetry.Metrics;
@@ -11,10 +12,24 @@ using OpenTelemetry.Trace;
 using Payment.Api.Filter;
 using Payment.Application.Services;
 using Payment.Application.Validation;
+using Payment.Bank.Stub;
+using Payment.Event;
+using Payment.Event.PaymentEventProcessor;
 using Payment.Infrastructure;
 using Payment.Infrastructure.Persistence.Repositories;
+using Polly;
+using Polly.Extensions.Http;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// TODO: Configure with actual Bank API
+// Bank API Stub creation and setting base URL
+var apiStub = BankApiStub.StartStub();
+builder.Configuration.AddInMemoryCollection(
+    new Dictionary<string, string?>
+    {
+        ["BankBaseUrl"] = apiStub.Address
+    });
 
 // Add services to the container.
 
@@ -44,6 +59,26 @@ builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IRepository<Payment.Domain.Payment>, PaymentRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddScoped<IPaymentProcessorStrategyFactory, PaymentEventProcessorStrategyFactory>();
+builder.Services.AddScoped<IEventProducer<PaymentEvent>, PaymentEventProducer>();
+
+// HttpClient
+builder.Services.AddHttpClient<IPaymentEventProcessor, SendPaymentEventProcessor>()
+    .AddPolicyHandler(GetRetryPolicy());
+
+// Mass Transit
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<PaymentEventConsumer>();
+
+    x.UsingInMemory((context, cfg) =>
+    {
+        cfg.ConfigureEndpoints(context);
+        cfg.UseNewtonsoftRawJsonSerializer();
+        cfg.UseNewtonsoftRawJsonDeserializer();
+    });
+});
+
 var connectionString = @"Server=.;Database=Payment;TrustServerCertificate=True;Trusted_Connection=True";
 
 builder.Services.AddDbContext<PaymentContext>(options =>
@@ -52,7 +87,7 @@ builder.Services.AddDbContext<PaymentContext>(options =>
     //options.UseInMemoryDatabase(databaseName: "Payments");
 });
 
-// Versioning
+// API Versioning
 builder.Services.AddApiVersioning(options =>
 {
     options.ReportApiVersions = true;
@@ -69,17 +104,18 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddIdempotentAPIUsingDistributedCache();
 
 // Open Telemetry
-builder.Services.AddOpenTelemetry()
-    .ConfigureResource(resourceBuilder => resourceBuilder.AddService("Payment Gateway"))
-    .WithTracing(builder => builder
-        .AddAspNetCoreInstrumentation()
-        .AddHttpClientInstrumentation()
-        .AddEntityFrameworkCoreInstrumentation()
-        .AddConsoleExporter())
-    .WithMetrics(builder => builder
-       .AddAspNetCoreInstrumentation()
-       .AddHttpClientInstrumentation()
-       .AddConsoleExporter());
+// TODO: Configure Exporter
+//builder.Services.AddOpenTelemetry()
+//    .ConfigureResource(resourceBuilder => resourceBuilder.AddService("Payment Gateway"))
+//    .WithTracing(builder => builder
+//        .AddAspNetCoreInstrumentation()
+//        .AddHttpClientInstrumentation()
+//        .AddEntityFrameworkCoreInstrumentation()
+//        .AddConsoleExporter())
+//    .WithMetrics(builder => builder
+//       .AddAspNetCoreInstrumentation()
+//       .AddHttpClientInstrumentation()
+//       .AddConsoleExporter());
 
 var app = builder.Build();
 
@@ -98,4 +134,9 @@ app.MapControllers();
 
 app.Run();
 
+
+static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy() => HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+        .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 public partial class Program { }

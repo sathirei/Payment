@@ -13,7 +13,8 @@ namespace Payment.Application.Dto
         int amount,
         string currency,
         string merchantId,
-        string reference
+        string reference,
+        string? response
         ) : this()
         {
             Id = id;
@@ -24,6 +25,7 @@ namespace Payment.Application.Dto
             Currency = currency;
             MerchantId = merchantId;
             Reference = reference;
+            Response = response;
         }
 
         private PaymentViewDto()
@@ -39,6 +41,7 @@ namespace Payment.Application.Dto
         public string Currency { get; private set; }
         public string MerchantId { get; private set; }
         public string Reference { get; private set; }
+        public string? Response { get; private set; }
         public DateTimeOffset CreatedDateTime { get; private set; }
         public DateTimeOffset LastChangedDateTime { get; private set; }
     }
